@@ -1,0 +1,32 @@
+ // create a new post from body json
+ app.post('/api/posts/', (req, res)=>{
+
+   let newPost = new Post({
+     title: req.body.title,
+     description: req.body.description
+   })
+
+   newPost.save().then((data) => {
+     console.log(data);
+     res.status(200).json({message: "post created successfully", data: data})
+   }).catch((err) => {
+     console.log(err);
+     res.status(500).json({message: err})
+   })
+ })
+
+ // Updating a specific post
+ app.put('/api/posts/:id', (req, res) => {
+    let postid = req.params.id;
+
+    let newInfo = {
+        title: req.body.title,
+        description: req.body.description
+    }
+
+    Post.findByIdAndUpdate(postid, newInfo).then((data) => {
+        res.status(200).json({message: "post update successfully", data: data})
+    }).catch((err) => {
+        res.staus(500).json({ message: err })
+    })
+ })

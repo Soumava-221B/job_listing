@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const jobSchema = new mongoose.Schema({
+    
   companyName: {
     type: String,
     required: true,
@@ -33,7 +34,15 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
+  
+},
+{
+  timestamps: {
+    createdAt: 'created_at', // Use `created_at` to store the created date
+    updatedAt: 'updated_at' // and `updated_at` to store the last updated date
+  }
+}
+);
 
 module.exports = mongoose.model("Job", jobSchema);
 

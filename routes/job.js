@@ -4,7 +4,7 @@ const Job = require("../models/job");
 const verifyToken = require("../middleware/authMiddleware");
 const job = require("../models/job");
 
-router.post("/create", verifyToken, async (req, res, next) => {
+router.post("/create", async (req, res, next) => {
   try {
     const {
       companyName,
@@ -65,5 +65,22 @@ router.get("/details/:jobId", async (req, res, next) => {
     next(error);
   }
 });
+
+router.put("/edit/:jobId", async (req, res, next) => {
+  try {
+    const reqPayload = req.body;
+
+    await Job.updateOne({ _id: jobId },
+      {
+        $set: {
+          ...reqPayload,
+        },
+      });
+
+      res.json({ message: "Job deatils updated successfully"})
+  } catch(error) {
+    next(error)
+  }
+})
 
 module.exports = router;
