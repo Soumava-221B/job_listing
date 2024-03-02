@@ -2,9 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Job = require("../models/job");
 const verifyToken = require("../middleware/authMiddleware");
-const job = require("../models/job");
 
-router.post("/create", async (req, res, next) => {
+router.post("/create", verifyToken, async (req, res, next) => {
   try {
     const {
       companyName,
@@ -59,7 +58,7 @@ router.get("/details/:jobId", async (req, res, next) => {
       });
     }
 
-    const jobDetails = await job.findById(jobId);
+    const jobDetails = await Job.findById(jobId);
     res.json({ data: jobDetails });
   } catch (error) {
     next(error);
@@ -70,17 +69,19 @@ router.put("/edit/:jobId", async (req, res, next) => {
   try {
     const reqPayload = req.body;
 
-    await Job.updateOne({ _id: jobId },
+    await Job.updateOne(
+      { _id: jobId },
       {
         $set: {
           ...reqPayload,
         },
-      });
+      }
+    );
 
-      res.json({ message: "Job deatils updated successfully"})
-  } catch(error) {
-    next(error)
+    res.json({ message: "Job deatils updated successfully" });
+  } catch (error) {
+    next(error);
   }
-})
+});
 
 module.exports = router;
